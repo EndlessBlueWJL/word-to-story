@@ -170,7 +170,8 @@ def make_delivery(request, content, reports):
     return {"version": DELIVERY_VERSION, "batch_id": request["batch_id"], "range": [request["start"], request["end"]],
             "total_images": sum(g["count"] for g in groups), "groups": groups,
             "quiz_order": [{"question": i, "number": r["number"]} for i, r in enumerate(quiz_rows(request), 1)],
-            "presentation": {"inline_images": True, "one_image_per_line": True, "answers_last": True,
+            "presentation": {"inline_images": True, "one_image_per_line": True,
+                             "visible_caption_before_every_image": True, "text_between_images": True, "answers_last": True,
                              "file_download_required": False, "default_non_image_attachments": False}}
 
 
