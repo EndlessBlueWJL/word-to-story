@@ -26,7 +26,7 @@ python -m wordstory import-pdf --pdf "<原PDF>" --out "<私有目录>/vocabulary
 4. 完成语言审读后填写 `editorial_review`，notes写清实际判断和必要限制，不能为了通过检查直接全选true。
 5. `python -m wordstory validate --request "<request.json>" --content "<content.json>"`。按报错修正文；不要改request或校验器。
 6. `python -m wordstory build --data "<data>" --request "<request.json>" --content "<content.json>"`。
-7. 打开delivery.json列出的全部PNG检查清晰度、字号、边缘、编号、分区和内容完整性，并查看360px/390px宽度的手机模拟预览。放不下则修改content后重建；旧版本保留，不覆盖原稿。抽查与答案顺序必须一致，遮词卡不得泄露目标词英文。
+7. 打开delivery.json列出的全部PNG检查清晰度、字号、边缘、编号、分区和内容完整性，并查看360px/390px宽度的手机模拟预览。逐行检查朗读和遮词正文的基线，特别看we、a、加粗词、句号及带下伸部的字母；普通词不得像编号一样上浮。放不下则修改content后重建；旧版本保留，不覆盖原稿。抽查与答案顺序必须一致，遮词卡不得泄露目标词英文。
 8. 这是正式“新一批”且检查通过时，用相同命令加 `--advance`。原子写入进度且重复执行不会二次推进；历史记录表示材料已生成，不表示学习者已掌握。
 9. 按delivery.json的groups顺序交付全部图片。每组先写用途和实际张数，再逐张嵌图。每张图前加一行可见的短编号/标题，再空行嵌图，图后再空行；下一张必须再次有文字标题。不能只用alt或连续纯图片段落，宿主会把它们并排缩成小图。组内编号与图上页码一致。默认示例是“下面4张：朗读背词”“下面4张：遮词回忆”“下面2张：单词抽查”“下面2张：对照答案”。其他批次用实际张数。不能并排拼图或只给目录、文件名、下载链接。正文、练习、答案都应在聊天里直接看图完成；Markdown/CSV/ZIP等后台文件默认不附。其他文字保持简短。
 

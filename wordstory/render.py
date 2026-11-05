@@ -43,6 +43,9 @@ def wrapped(draw, value, x, y, width, size, leading, color=INK, bold=False):
 def rich(draw, paragraph, x, y, width, targets, vocab, accent, tint, masked=False):
     # Keep punctuation with each word; exact headwords receive original numbers.
     x0 = x
+    # y is the line's cap-height top. All body runs share its baseline:
+    # anchor="lt" would lift lowercase-only words and standalone punctuation.
+    baseline_offset = -font("body", 42).getbbox("H", anchor="ls")[1]
     paragraph = paragraph.replace("’", "'")
     pattern = r"(?<![A-Za-z])(?:" + "|".join(re.escape(w) for w in sorted(targets, key=len, reverse=True)) + r")(?![A-Za-z])"
     units, last = [], 0
@@ -78,10 +81,10 @@ def rich(draw, paragraph, x, y, width, targets, vocab, accent, tint, masked=Fals
                 if masked:
                     draw.line((x, y + 43, x + sw, y + 43), fill=accent, width=2)
                 else:
-                    draw.text((x, y), part, font=ft, fill=accent, anchor="lt")
+                    draw.text((x, y + baseline_offset), part, font=ft, fill=accent, anchor="ls")
                 text(draw, (x + sw + 2, y), number, 17, accent, True)
             else:
-                draw.text((x, y), part, font=ft, fill=INK, anchor="lt")
+                draw.text((x, y + baseline_offset), part, font=ft, fill=INK, anchor="ls")
             x += sw + nw
     return y + 56
 
