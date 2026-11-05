@@ -185,6 +185,17 @@ def render_package(request, content, destination):
     return delivery
 
 
+def write_image_reply(output, delivery, final_directory):
+    """An exact, caption-separated reply; the agent must not retype file paths."""
+    lines = [f"第{delivery['range'][0]}—{delivery['range'][1]}词 · 共{delivery['total_images']}张图片", ""]
+    for group in delivery["groups"]:
+        lines += [f"{group['title']}：下面{group['count']}张。{group['purpose']}", ""]
+        for card in group["images"]:
+            actual = Path(final_directory) / card["file"]
+            lines += [card["caption"], "", f"![{card['caption']}](<{actual.as_posix()}>)", ""]
+    (Path(output) / "image-reply.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def verify_delivery(output, request):
     output = Path(output)
     delivery = read_json(output / "delivery.json")

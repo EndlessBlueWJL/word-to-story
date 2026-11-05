@@ -37,6 +37,17 @@ class MobileTests(unittest.TestCase):
             self.assertEqual(result["images"], 12)
             self.assertFalse(delivery["presentation"]["file_download_required"])
             self.assertTrue(all(card["file"].endswith(".png") for group in delivery["groups"] for card in group["images"]))
+            import re
+            reply = (Path(result["output"]) / "image-reply.md").read_text(encoding="utf-8")
+            targets = re.findall(r"!\[[^\]]+\]\(<([^>]+)>\)", reply)
+            self.assertEqual(len(targets), 12)
+            self.assertTrue(all(Path(target).is_file() for target in targets))
+            paragraphs = reply.split("\n\n")
+            for i, paragraph in enumerate(paragraphs):
+                if paragraph.startswith("!["):
+                    self.assertGreater(i, 0)
+                    self.assertTrue(paragraphs[i - 1].strip())
+                    self.assertFalse(paragraphs[i - 1].startswith("!["))
             (Path(result["output"]) / "cloze-01.png").unlink()
             with self.assertRaises((FileNotFoundError, ValueError)):
                 workflow.build(data, prepared["request"], prepared["content"], advance=True)

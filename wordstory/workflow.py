@@ -146,7 +146,7 @@ def verify_manifest(output):
 
 
 def build(data, request_path, content_path, advance=False):
-    from .mobile import render_package, verify_delivery
+    from .mobile import render_package, verify_delivery, write_image_reply
     data = Path(data).resolve()
     request, content = read_json(request_path), read_json(content_path)
     report = validate(request, content)
@@ -185,6 +185,7 @@ def build(data, request_path, content_path, advance=False):
             write_json(stage / "content.json", content)
             delivery = render_package(request, content, stage)
             verify_delivery(stage, request)
+            write_image_reply(stage, delivery, final)
             report["images"] = [card for group in delivery["groups"] for card in group["images"]]
             export_text(request, content, stage)
             write_json(stage / "validation.json", report)
