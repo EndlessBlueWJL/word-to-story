@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+data/
+runs/
+private/
+*.pdf
+*.zip
+assets/fonts/*.ttf
+assets/fonts/*.ttc
+assets/fonts/*.part
+!examples/vocabulary.csv

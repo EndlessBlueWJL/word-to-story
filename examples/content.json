@@ -1,0 +1,293 @@
+{
+  "batch_id": "example-0332-0366",
+  "rules_version": "vocabulary-first-speaking-v1",
+  "stories": [
+    {
+      "id": 1,
+      "title": "一次让我思考的参观",
+      "en_title": "A Museum Visit to Remember",
+      "topic": "文化与旅游",
+      "kind": "小故事",
+      "words": [
+        "massive",
+        "massacre",
+        "occupation",
+        "occupy",
+        "occur",
+        "occurrence",
+        "offend",
+        "paragraph",
+        "quote"
+      ],
+      "paragraphs": [
+        "Last year, I visited a town museum with a friend. We stood by a massive map and read a paragraph about the occupation of the town. An army had come to occupy the town. A massacre had taken place there.",
+        "I asked why such things occur. My friend said this sad occurrence showed why peace matters. We spoke quietly because we did not want to offend other visitors.",
+        "I still remember one quote: 'Learn from the past.' I like museums that help me understand people."
+      ],
+      "gist": "我和朋友参观小镇博物馆，了解当地的战争往事。一句“从过去学习”的话，让我记住了这次参观。",
+      "grammar": [
+        {
+          "label": "定语从句 · 描述你喜欢的事物",
+          "example": "I like museums that help me understand people.",
+          "explanation": "that help me understand people 修饰 museums。"
+        }
+      ],
+      "retell": "博物馆 → 历史 → 引语",
+      "rewrite": "I like museums that help me _____."
+    },
+    {
+      "id": 2,
+      "title": "周日一起改善公园",
+      "en_title": "A Small Change to Our Park",
+      "topic": "环境与社区",
+      "kind": "日常对话",
+      "words": [
+        "marginal",
+        "offer",
+        "offset",
+        "offspring",
+        "part",
+        "partial",
+        "partly",
+        "partner",
+        "spare",
+        "scheme"
+      ],
+      "paragraphs": [
+        "Mia: \"Our town has a new scheme for the park. Can you spare an hour on Sunday?\"",
+        "Ben: \"Sure. I can offer some help. Which part of the park needs work?\"",
+        "Mia: \"This area is partly in the sun. We could plant trees where birds can raise their offspring.\"",
+        "Ben: \"We only have a partial plan. How will we pay for the trees?\"",
+        "Mia: \"Selling old books could offset the cost. Even a marginal change would help.\"",
+        "Ben: \"Good idea. If you need a partner, I'll join you.\""
+      ],
+      "gist": "两人商量周日帮忙改善公园：种树给鸟儿一个家，再卖旧书补贴费用。计划还不完整，可以一起完善。",
+      "grammar": [
+        {
+          "label": "真实条件句 · 提出帮助",
+          "example": "If you need a partner, I'll join you.",
+          "explanation": "If 从句用一般现在时，主句用 will + 动词原形。"
+        }
+      ],
+      "retell": "周日 → 公园 → 卖旧书",
+      "rewrite": "If you need a partner, I'll _____."
+    },
+    {
+      "id": 3,
+      "title": "敢于尝试的一堂课",
+      "en_title": "Learning by Trying",
+      "topic": "科学与教育",
+      "kind": "小故事",
+      "words": [
+        "mass",
+        "paralyse",
+        "parallel",
+        "participant",
+        "participate",
+        "particle",
+        "particular",
+        "science"
+      ],
+      "paragraphs": [
+        "I wanted to participate in a science class, but I was afraid of making mistakes. \"Don't let fear paralyse you,\" the teacher said.",
+        "Every participant worked in a small group. We built a small bridge with two parallel sticks. Then we found the mass of a stone and put it on the bridge. I saw a particle of sand fall from the stone.",
+        "I liked this particular class because I could learn by doing. When something went wrong, we tried again."
+      ],
+      "gist": "我怕做错，老师鼓励我动手尝试。小组用木棍搭桥，再放上石头测试；做错了就再试一次。",
+      "grammar": [
+        {
+          "label": "原因状语从句 · 解释你为什么喜欢",
+          "example": "I liked this particular class because I could learn by doing.",
+          "explanation": "because 引出原因，适合讲述经历和表达喜好。"
+        }
+      ],
+      "retell": "害怕 → 搭桥 → 再试一次",
+      "rewrite": "I liked this particular _____ because I could _____."
+    },
+    {
+      "id": 4,
+      "title": "给喜欢的音乐留时间",
+      "en_title": "Making Time for Music",
+      "topic": "兴趣与生活",
+      "kind": "日常对话",
+      "words": [
+        "passion",
+        "passive",
+        "quick",
+        "quit",
+        "quest",
+        "questionnaire",
+        "span",
+        "schedule"
+      ],
+      "paragraphs": [
+        "Leo: \"Are you going to quit the music club?\"",
+        "Amy: \"I have a passion for music, but my schedule is full.\"",
+        "Leo: \"Could you make a quick change and keep Friday evening free?\"",
+        "Amy: \"The club asked us to fill in a questionnaire. I won't stay passive. I'll share my ideas.\"",
+        "Leo: \"Even a short span of time can help.\"",
+        "Amy: \"If I had more free time, I would play music with friends. My quest for a better week starts here.\""
+      ],
+      "gist": "艾米热爱音乐，却觉得日程太满。她准备在俱乐部问卷中主动提建议，从小改变开始给爱好留时间。",
+      "grammar": [
+        {
+          "label": "虚拟语气 · 谈谈你希望怎样改变",
+          "example": "If I had more free time, I would play music with friends.",
+          "explanation": "If + 过去式，主句用 would + 动词原形，假设当前情况。"
+        }
+      ],
+      "retell": "音乐 → 日程 → 小改变",
+      "rewrite": "If I had more free time, I would _____."
+    }
+  ],
+  "details": {
+    "marginal": {
+      "meaning": "微小的",
+      "chunk": "a marginal change"
+    },
+    "mass": {
+      "meaning": "质量",
+      "chunk": "the mass of a stone"
+    },
+    "massive": {
+      "meaning": "巨大的",
+      "chunk": "a massive map"
+    },
+    "massacre": {
+      "meaning": "大屠杀",
+      "chunk": "a massacre"
+    },
+    "occupation": {
+      "meaning": "占领（名）",
+      "chunk": "the occupation of the town"
+    },
+    "occupy": {
+      "meaning": "占领（动）",
+      "chunk": "occupy the town"
+    },
+    "occur": {
+      "meaning": "发生",
+      "chunk": "such things occur"
+    },
+    "occurrence": {
+      "meaning": "事件",
+      "chunk": "this sad occurrence"
+    },
+    "offend": {
+      "meaning": "冒犯",
+      "chunk": "offend other visitors"
+    },
+    "offer": {
+      "meaning": "提供",
+      "chunk": "offer some help"
+    },
+    "offset": {
+      "meaning": "抵消；弥补",
+      "chunk": "offset the cost"
+    },
+    "offspring": {
+      "meaning": "后代；幼崽",
+      "chunk": "their offspring"
+    },
+    "paragraph": {
+      "meaning": "段落",
+      "chunk": "a paragraph"
+    },
+    "paralyse": {
+      "meaning": "使无法行动",
+      "chunk": "let fear paralyse you"
+    },
+    "parallel": {
+      "meaning": "平行的",
+      "chunk": "two parallel sticks"
+    },
+    "part": {
+      "meaning": "部分",
+      "chunk": "part of the park"
+    },
+    "partial": {
+      "meaning": "不完整的",
+      "chunk": "a partial plan"
+    },
+    "participant": {
+      "meaning": "参与者",
+      "chunk": "every participant"
+    },
+    "participate": {
+      "meaning": "参与",
+      "chunk": "participate in"
+    },
+    "particle": {
+      "meaning": "微粒",
+      "chunk": "a particle of sand"
+    },
+    "particular": {
+      "meaning": "特定的",
+      "chunk": "this particular class"
+    },
+    "partly": {
+      "meaning": "部分地",
+      "chunk": "partly in the sun"
+    },
+    "partner": {
+      "meaning": "搭档",
+      "chunk": "a partner"
+    },
+    "passion": {
+      "meaning": "热爱",
+      "chunk": "a passion for music"
+    },
+    "passive": {
+      "meaning": "被动的",
+      "chunk": "stay passive"
+    },
+    "quick": {
+      "meaning": "迅速的",
+      "chunk": "a quick change"
+    },
+    "quit": {
+      "meaning": "退出",
+      "chunk": "quit the music club"
+    },
+    "quest": {
+      "meaning": "追求",
+      "chunk": "quest for a better week"
+    },
+    "questionnaire": {
+      "meaning": "调查问卷",
+      "chunk": "fill in a questionnaire"
+    },
+    "quote": {
+      "meaning": "引语",
+      "chunk": "remember one quote"
+    },
+    "span": {
+      "meaning": "一段时间",
+      "chunk": "a short span of time"
+    },
+    "spare": {
+      "meaning": "抽出（时间）",
+      "chunk": "spare an hour"
+    },
+    "schedule": {
+      "meaning": "日程安排",
+      "chunk": "my schedule is full"
+    },
+    "scheme": {
+      "meaning": "计划；方案",
+      "chunk": "a new scheme"
+    },
+    "science": {
+      "meaning": "科学",
+      "chunk": "a science class"
+    }
+  },
+  "editorial_review": {
+    "simple_other_words": true,
+    "natural_speech": true,
+    "ielts_topics": true,
+    "exam_grammar": true,
+    "meaning_and_collocations": true,
+    "notes": "沿用最后确认的背词口语版本：正文、词块、语法和口头改写任务保持一致。occupation/massacre、offspring、quest 等目标词较正式，用具体语境解释，不鼓励在所有口语回答中硬套。"
+  }
+}

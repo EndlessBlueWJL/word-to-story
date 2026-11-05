@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280">
+  <rect width="1200" height="280" rx="24" fill="#f7f5f0"/>
+  <rect width="12" height="280" rx="6" fill="#24766c"/>
+  <text x="54" y="65" font-family="sans-serif" font-size="18" letter-spacing="3" fill="#52625a">VOCABULARY FIRST · SPEAKING SECOND</text>
+  <text x="50" y="138" font-family="sans-serif" font-size="58" font-weight="700" fill="#24322f">Word to Story</text>
+  <text x="54" y="192" font-family="sans-serif" font-size="27" fill="#52625a">35 words. Small stories. Speak them aloud.</text>
+  <rect x="886" y="50" width="240" height="180" rx="20" fill="#e7f3ed"/>
+  <text x="1006" y="152" text-anchor="middle" font-family="sans-serif" font-size="83" font-weight="700" fill="#24766c">35</text>
+  <text x="1006" y="194" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#52625a">READ · RECALL · RETELL</text>
+</svg>
