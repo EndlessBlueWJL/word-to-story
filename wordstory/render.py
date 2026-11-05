@@ -40,7 +40,7 @@ def wrapped(draw, value, x, y, width, size, leading, color=INK, bold=False):
     return y
 
 
-def rich(draw, paragraph, x, y, width, targets, vocab, accent, tint):
+def rich(draw, paragraph, x, y, width, targets, vocab, accent, tint, masked=False):
     # Keep punctuation with each word; exact headwords receive original numbers.
     x0 = x
     paragraph = paragraph.replace("’", "'")
@@ -62,10 +62,11 @@ def rich(draw, paragraph, x, y, width, targets, vocab, accent, tint):
             key = part.lower().replace("’", "'")
             target = is_target
             ft = font("body", 42, target)
-            sw = draw.textlength(part, font=ft)
+            display = "______" if target and masked else part
+            sw = draw.textlength(display, font=ft)
             number = str(vocab[key]["number"]) if target else ""
             nw = draw.textlength(number, font=font("ui", 17, True)) + 5 if target else 0
-            segments.append((part, ft, sw, number, nw))
+            segments.append((display, ft, sw, number, nw))
             total += sw + nw
         if total > width:
             raise ValueError(f"Body token too wide: {token}")
@@ -74,7 +75,10 @@ def rich(draw, paragraph, x, y, width, targets, vocab, accent, tint):
         for part, ft, sw, number, nw in segments:
             if number:
                 draw.rounded_rectangle((x - 2, y - 1, x + sw + 2, y + 46), radius=6, fill=tint)
-                draw.text((x, y), part, font=ft, fill=accent, anchor="lt")
+                if masked:
+                    draw.line((x, y + 43, x + sw, y + 43), fill=accent, width=2)
+                else:
+                    draw.text((x, y), part, font=ft, fill=accent, anchor="lt")
                 text(draw, (x + sw + 2, y), number, 17, accent, True)
             else:
                 draw.text((x, y), part, font=ft, fill=INK, anchor="lt")
@@ -92,7 +96,7 @@ def render(request, content, destination):
         d = ImageDraw.Draw(im)
         td = ImageDraw.Draw(Image.new("RGB", (W, H), BG))
         d.rectangle((0, 0, W, 9), fill=accent)
-        label = f"背词＋口语 · {request['start']}–{request['end']}"
+        label = f"① 朗读背词 · {request['start']}–{request['end']}"
         text(d, (32, 28), label, 24, MUTED)
         right = f"{s['id']:02d}/{len(content['stories']):02d} · {s['topic']} · {len(s['words'])}词"
         if d.textlength(right, font=font("ui", 24, True)) > 570:

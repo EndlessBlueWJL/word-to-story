@@ -146,14 +146,14 @@ def verify_manifest(output):
 
 
 def build(data, request_path, content_path, advance=False):
-    from .render import render
+    from .mobile import render_package, verify_delivery
     data = Path(data).resolve()
     request, content = read_json(request_path), read_json(content_path)
     report = validate(request, content)
     fingerprint = canonical_hash(content)
     engine_hash = canonical_hash({p: digest(ROOT / p) for p in (
         "wordstory/render.py", "wordstory/fonts.py", "wordstory/validation.py",
-        "wordstory/workflow.py", "assets/fonts/manifest.json", "docs/CONTENT_RULES.md")})
+        "wordstory/workflow.py", "wordstory/mobile.py", "assets/fonts/manifest.json", "docs/CONTENT_RULES.md")})
     # All files stay in this profile, even if the content was uploaded elsewhere.
     run = data / "runs" / request["batch_id"]
     if Path(request["batch_id"]).name != request["batch_id"] or ":" in request["batch_id"]:
@@ -175,6 +175,7 @@ def build(data, request_path, content_path, advance=False):
             raise ValueError("Stale request: progress changed; prepare a new batch")
         if final.exists():
             manifest = verify_manifest(final)
+            delivery = verify_delivery(final, request)
             if manifest["content_hash"] != fingerprint or manifest["request_hash"] != request["request_hash"] or manifest["engine_hash"] != engine_hash:
                 raise ValueError("Output identity mismatch")
         else:
@@ -182,7 +183,9 @@ def build(data, request_path, content_path, advance=False):
             stage.mkdir(parents=True)
             write_json(stage / "request.json", request)
             write_json(stage / "content.json", content)
-            report["images"] = render(request, content, stage)
+            delivery = render_package(request, content, stage)
+            verify_delivery(stage, request)
+            report["images"] = [card for group in delivery["groups"] for card in group["images"]]
             export_text(request, content, stage)
             write_json(stage / "validation.json", report)
             files = {p.name: digest(p) for p in sorted(stage.iterdir()) if p.is_file()}
@@ -198,6 +201,7 @@ def build(data, request_path, content_path, advance=False):
             write_json(stage / "manifest.json", manifest)
             stage.rename(final)
             verify_manifest(final)
+            verify_delivery(final, request)
         changed = False
         if advance and not previous:
             state["next_number"] = request["end"] + 1
@@ -205,7 +209,9 @@ def build(data, request_path, content_path, advance=False):
                                      "date": request["date"], "content_hash": fingerprint, "output": final.relative_to(data).as_posix()})
             write_json(data / "state.json", state)
             changed = True
-    return {"output": str(final), "coverage": "35/35", "images": len(content["stories"]),
+    return {"output": str(final), "coverage": "35/35", "images": delivery["total_images"],
+            "image_groups": [{"title": g["title"], "count": g["count"]} for g in delivery["groups"]],
+            "delivery_manifest": str(final / "delivery.json"),
             "progress_advanced": changed, "next_number": state["next_number"]}
 
 

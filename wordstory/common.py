@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 ROOT = Path(__file__).resolve().parent.parent
 RULES_VERSION = "vocabulary-first-speaking-v1"
+DELIVERY_VERSION = "mobile-images-v1"
 
 
 def today():

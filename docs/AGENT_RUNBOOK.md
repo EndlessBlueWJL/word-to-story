@@ -26,9 +26,9 @@ python -m wordstory import-pdf --pdf "<原PDF>" --out "<私有目录>/vocabulary
 4. 完成语言审读后填写 `editorial_review`，notes写清实际判断和必要限制，不能为了通过检查直接全选true。
 5. `python -m wordstory validate --request "<request.json>" --content "<content.json>"`。按报错修正文；不要改request或校验器。
 6. `python -m wordstory build --data "<data>" --request "<request.json>" --content "<content.json>"`。
-7. 打开全部PNG检查清晰度、字号、边缘、编号、分区和内容完整性。放不下则修改content后重建；旧版本保留，不覆盖原稿。
+7. 打开delivery.json列出的全部PNG检查清晰度、字号、边缘、编号、分区和内容完整性，并查看360px/390px宽度的手机模拟预览。放不下则修改content后重建；旧版本保留，不覆盖原稿。抽查与答案顺序必须一致，遮词卡不得泄露目标词英文。
 8. 这是正式“新一批”且检查通过时，用相同命令加 `--advance`。原子写入进度且重复执行不会二次推进；历史记录表示材料已生成，不表示学习者已掌握。
-9. 回复用户：范围、张数、全部图片预览/可用附件、正文和learning-pack.zip、是否推进进度。不可只贴服务器内绝对路径当成手机可下载地址，应使用当前宿主支持的附件入口。
+9. 按delivery.json的groups顺序交付全部图片。每组先写用途和实际张数，再逐张嵌图，每张独立段落；组内编号与图上页码一致。默认示例是“下面4张：朗读背词”“下面4张：遮词回忆”“下面2张：单词抽查”“下面2张：对照答案”。其他批次用实际张数。不能并排拼图或只给目录、文件名、下载链接。正文、练习、答案都应在聊天里直接看图完成；Markdown/CSV/ZIP等后台文件默认不附。仅用短文字说明词号范围和是否推进，避免手机端长篇文字打断图片分组。
 
 ## 收到“重写今天的 / 再用原来35词测试”
 
@@ -40,7 +40,7 @@ python -m wordstory import-pdf --pdf "<原PDF>" --out "<私有目录>/vocabulary
 python -m wordstory demo --data "<私有测试目录>"
 ```
 
-从公开样例复现最后确认的332—366词。demo建立独立子目录，不改正式进度，不调用模型API，不联网写正文，也不发送微信。先运行fonts准备字体。
+从公开样例复现最后确认的332—366词，生成四组完整图片。demo建立独立子目录，不改正式进度，不调用模型API，不联网写正文，也不发送微信。先运行fonts准备字体。
 
 ## 备份与恢复
 
@@ -49,7 +49,7 @@ python -m wordstory backup --data "<data>" --out "<私有目录>/wordstory-backu
 python -m wordstory restore --archive "<备份.zip>" --data "<新的空目录>"
 ```
 
-备份包含完整词表、进度和运行成品，只通过私有附件/个人存储保存，绝不放入公开仓库。备份输出必须在data目录外，恢复不能覆盖现有进度。打包/恢复不会把学习包learning-pack.zip误当作进度备份。
+备份包含完整词表、进度和运行成品，只通过私有附件/个人存储保存，绝不放入公开仓库。仅在用户明确索要备份/源文件时交付，不能用备份替代日常图片。备份输出必须在data目录外，恢复不能覆盖现有进度。打包/恢复不会把学习包learning-pack.zip误当作进度备份。
 
 ## 故障
 

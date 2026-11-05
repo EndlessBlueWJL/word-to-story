@@ -23,10 +23,27 @@ class WorkflowTests(unittest.TestCase):
         # Isolate state/receipt tests from graphics/network. Real fonts/rendering
         # are exercised separately by the end-to-end demo in CI.
         def renderer(request, content, destination):
-            for s in content["stories"]:
-                (destination / f"story-{s['id']:02d}.png").write_bytes(b"test-image")
-            return [{"file": "story-01.png", "size": [1080, 1920]}]
-        self.render_patch = patch("wordstory.render.render", side_effect=renderer)
+            from io import BytesIO
+            from PIL import Image
+            from wordstory.mobile import make_delivery
+            if not hasattr(type(self), "sample_png"):
+                stream = BytesIO()
+                Image.new("RGB", (1080, 1920), "white").save(stream, format="PNG")
+                type(self).sample_png = stream.getvalue()
+            groups = {}
+            for kind, prefix, count in (("reading", "story", 4), ("cloze", "cloze", 4), ("quiz", "quiz", 2), ("answers", "answers", 2)):
+                groups[kind] = []
+                for i in range(1, count + 1):
+                    name = f"{prefix}-{i:02d}.png"
+                    (destination / name).write_bytes(self.sample_png)
+                    card = {"file": name, "size": [1080, 1920]}
+                    if kind in ("quiz", "answers"):
+                        card["question_range"] = [1, 18] if i == 1 else [19, 35]
+                    groups[kind].append(card)
+            delivery = make_delivery(request, content, groups)
+            write_json(destination / "delivery.json", delivery)
+            return delivery
+        self.render_patch = patch("wordstory.mobile.render_package", side_effect=renderer)
         self.render_patch.start()
         self.addCleanup(self.render_patch.stop)
 
@@ -109,7 +126,7 @@ class WorkflowTests(unittest.TestCase):
             workflow.build(self.data, stale["request"], stale["content"], True)
 
     def test_render_failure_leaves_progress_intact(self):
-        with patch("wordstory.render.render", side_effect=ValueError("overflow")):
+        with patch("wordstory.mobile.render_package", side_effect=ValueError("overflow")):
             with self.assertRaisesRegex(ValueError, "overflow"):
                 self.build(True)
         self.assertEqual(read_json(self.data / "state.json")["next_number"], 332)
