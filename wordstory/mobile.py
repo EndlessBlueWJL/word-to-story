@@ -167,11 +167,18 @@ def make_delivery(request, content, reports):
                        "images": [dict(card, caption=f"{title} {i}/{len(cards)}" +
                                         (f" · 第{card['question_range'][0]}—{card['question_range'][1]}题" if "question_range" in card else ""))
                                   for i, card in enumerate(cards, 1)]})
+    pairs = [{"story_id": s["id"], "title": s["title"],
+              "reading": f"story-{s['id']:02d}.png", "cloze": f"cloze-{s['id']:02d}.png"}
+             for s in content["stories"]]
+    image_order = [pair[kind] for pair in pairs for kind in ("reading", "cloze")]
+    image_order += [card["file"] for kind in ("quiz", "answers") for card in reports[kind]]
     return {"version": DELIVERY_VERSION, "batch_id": request["batch_id"], "range": [request["start"], request["end"]],
             "total_images": sum(g["count"] for g in groups), "groups": groups,
+            "pairs": pairs, "image_order": image_order,
             "quiz_order": [{"question": i, "number": r["number"]} for i, r in enumerate(quiz_rows(request), 1)],
             "presentation": {"inline_images": True, "one_image_per_line": True,
-                             "visible_caption_before_every_image": True, "text_between_images": True, "answers_last": True,
+                             "visible_caption_before_every_image": True, "text_between_images": True,
+                             "reading_cloze_paired": True, "answers_last": True,
                              "file_download_required": False, "default_non_image_attachments": False}}
 
 
@@ -188,11 +195,21 @@ def render_package(request, content, destination):
 def write_image_reply(output, delivery, final_directory):
     """An exact, caption-separated reply; the agent must not retype file paths."""
     lines = [f"第{delivery['range'][0]}—{delivery['range'][1]}词 · 共{delivery['total_images']}张图片", ""]
+    def append_image(caption, name):
+        actual = Path(final_directory) / name
+        lines.extend([caption, "", f"![{caption}](<{actual.as_posix()}>)", ""])
+
+    pairs = delivery["pairs"]
+    for pair in pairs:
+        lines += [f"第{pair['story_id']}篇 · {pair['title']}：下面2张，先完整朗读，再挖空回忆，可上下对照。", ""]
+        for kind, label in (("reading", "完整"), ("cloze", "挖空")):
+            append_image(f"{label}{pair['story_id']}/{len(pairs)} · {pair['title']}", pair[kind])
     for group in delivery["groups"]:
+        if group["id"] not in ("quiz", "answers"):
+            continue
         lines += [f"{group['title']}：下面{group['count']}张。{group['purpose']}", ""]
         for card in group["images"]:
-            actual = Path(final_directory) / card["file"]
-            lines += [card["caption"], "", f"![{card['caption']}](<{actual.as_posix()}>)", ""]
+            append_image(card["caption"], card["file"])
     (Path(output) / "image-reply.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -219,6 +236,19 @@ def verify_delivery(output, request):
         raise ValueError("Cloze cards must match complete story cards")
     if groups["quiz"]["count"] != groups["answers"]["count"]:
         raise ValueError("Quiz and answers must have matching pages")
+    pairs = delivery.get("pairs", [])
+    if len(pairs) != groups["reading"]["count"]:
+        raise ValueError("Each story needs exactly one complete/cloze pair")
+    for i, pair in enumerate(pairs, 1):
+        if (pair.get("story_id") != i or not pair.get("title")
+                or pair.get("reading") != groups["reading"]["images"][i - 1]["file"]
+                or pair.get("cloze") != groups["cloze"]["images"][i - 1]["file"]
+                or pair["reading"] != f"story-{i:02d}.png" or pair["cloze"] != f"cloze-{i:02d}.png"):
+            raise ValueError("Complete/cloze images must match the same story in source order")
+    expected_order = [pair[kind] for pair in pairs for kind in ("reading", "cloze")]
+    expected_order += [card["file"] for kind in ("quiz", "answers") for card in groups[kind]["images"]]
+    if delivery.get("image_order") != expected_order:
+        raise ValueError("Show each complete story immediately before its cloze; quiz then answers last")
     if len(set(files)) != len(files) or delivery["total_images"] != len(files):
         raise ValueError("Mobile image count mismatch")
     if sorted(r["number"] for r in delivery["quiz_order"]) != [r["number"] for r in request["vocabulary"]]:

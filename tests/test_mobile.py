@@ -1,3 +1,4 @@
+import copy
 import tempfile
 import unittest
 from pathlib import Path
@@ -35,12 +36,17 @@ class MobileTests(unittest.TestCase):
             self.assertEqual([g["id"] for g in delivery["groups"]], ["reading", "cloze", "quiz", "answers"])
             self.assertEqual([g["count"] for g in delivery["groups"]], [4, 4, 2, 2])
             self.assertEqual(result["images"], 12)
+            expected_order = [name for i in range(1, 5) for name in (f"story-{i:02d}.png", f"cloze-{i:02d}.png")]
+            expected_order += ["quiz-01.png", "quiz-02.png", "answers-01.png", "answers-02.png"]
+            self.assertEqual(delivery["image_order"], expected_order)
+            self.assertEqual([pair["story_id"] for pair in delivery["pairs"]], [1, 2, 3, 4])
             self.assertFalse(delivery["presentation"]["file_download_required"])
             self.assertTrue(all(card["file"].endswith(".png") for group in delivery["groups"] for card in group["images"]))
             import re
             reply = (Path(result["output"]) / "image-reply.md").read_text(encoding="utf-8")
             targets = re.findall(r"!\[[^\]]+\]\(<([^>]+)>\)", reply)
             self.assertEqual(len(targets), 12)
+            self.assertEqual([Path(target).name for target in targets], expected_order)
             self.assertTrue(all(Path(target).is_file() for target in targets))
             paragraphs = reply.split("\n\n")
             for i, paragraph in enumerate(paragraphs):
@@ -48,6 +54,18 @@ class MobileTests(unittest.TestCase):
                     self.assertGreater(i, 0)
                     self.assertTrue(paragraphs[i - 1].strip())
                     self.assertFalse(paragraphs[i - 1].startswith("!["))
+            # Old grouped ordering or a different story's cloze must fail.
+            bad = copy.deepcopy(delivery)
+            bad["image_order"] = [card["file"] for group in bad["groups"] for card in group["images"]]
+            write_json(Path(result["output"]) / "delivery.json", bad)
+            with self.assertRaisesRegex(ValueError, "immediately before its cloze"):
+                verify_delivery(result["output"], request)
+            bad = copy.deepcopy(delivery)
+            bad["pairs"][0]["cloze"] = "cloze-02.png"
+            write_json(Path(result["output"]) / "delivery.json", bad)
+            with self.assertRaisesRegex(ValueError, "same story"):
+                verify_delivery(result["output"], request)
+            write_json(Path(result["output"]) / "delivery.json", delivery)
             (Path(result["output"]) / "cloze-01.png").unlink()
             with self.assertRaises((FileNotFoundError, ValueError)):
                 workflow.build(data, prepared["request"], prepared["content"], advance=True)
